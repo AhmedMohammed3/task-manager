@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 services:
   postgres:
     image: postgres
@@ -7,12 +7,12 @@ services:
       PSQL_USER: ${PSQL_USER}
       PSQL_PASSWORD: ${PSQL_PASSWORD}
     ports:
-      - "5432:5432"
+      - '${PSQL_PORT}:${PSQL_PORT}'
 
   app:
     build: .
     ports:
-      - "3000:3000"
+      - '3000:3000'
     depends_on:
       - postgres
     environment:
