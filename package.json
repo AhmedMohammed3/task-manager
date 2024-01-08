@@ -7,7 +7,8 @@
     "start": "SET NODE_ENV=development&&node server.js",
     "dev": "SET NODE_ENV=development&&nodemon server.js",
     "start-prod": "SET NODE_ENV=production&&node server.js",
-    "test": "SET NODE_ENV=test&&mocha --timeout=20000"
+    "test": "SET NODE_ENV=test&&mocha --timeout=20000",
+    "migrate-dev": "SET NODE_ENV=development&&npx sequelize-cli db:migrate"
   },
   "keywords": [],
   "author": "",

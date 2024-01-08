@@ -25,8 +25,8 @@ module.exports = {
       name: PSQL_DEV_DB,
       host: PSQL_DEV_HOST,
       port: PSQL_DEV_PORT,
-      dialect: "postgres"
     },
+    dialect: "postgres",
     ...process.env
   },
   testing: {
