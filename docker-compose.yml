@@ -2,18 +2,16 @@ version: '2'
 services:
   postgres:
     image: postgres
-    environment:
-      PSQL_DB: ${PSQL_DB}
-      PSQL_USER: ${PSQL_USER}
-      PSQL_PASSWORD: ${PSQL_PASSWORD}
+    env_file:
+      - .env
     ports:
       - '${PSQL_PORT}:${PSQL_PORT}'
 
   app:
     build: .
     ports:
-      - '3000:3000'
+      - '${PORT}:${PORT}'
     depends_on:
       - postgres
-    environment:
-      PSQL_HOST: ${PSQL_HOST}
+    env_file:
+      - .env
