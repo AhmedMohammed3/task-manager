@@ -20,6 +20,15 @@ Task.init({
     type: DataTypes.STRING,
     allowNull: true
   },
+  status: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0
+  },
+  dueDate: {
+    type: DataTypes.DATE,
+    allowNull: true
+  },
   deleted: {
     type: DataTypes.BOOLEAN,
     defaultValue: false

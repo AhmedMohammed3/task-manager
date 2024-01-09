@@ -20,6 +20,7 @@ class AuthController {
     }
 
     async checkUserName(req, res, next) {
+        //TODO: suggest usernames according to the upcoming username
         try {
             const {
                 username
@@ -52,6 +53,7 @@ class AuthController {
             if (!email) {
                 throw new GeneralUserError("Email is required");
             }
+            //TODO: validate email format
             const registered = await this.userService.isRegistered({
                 email
             });
