@@ -17,6 +17,14 @@ User.init({
         allowNull: false,
         unique: true
     },
+    fName: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    lName: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     email: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -26,4 +34,11 @@ User.init({
         type: DataTypes.STRING,
         allowNull: false
     }
-})
+}, {
+    sequelize,
+    modelName: 'User',
+    tableName: 'users',
+    timestamps: true
+});
+
+module.exports = User;
