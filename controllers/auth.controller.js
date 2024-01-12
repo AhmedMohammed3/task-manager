@@ -7,6 +7,8 @@ const UserRegisteration = require('../errors/UserRegisteration');
 const NotFoundError = require('../errors/NotFoundError');
 const AuthMiddleware = require('../middlewares/auth.middleware');
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 class AuthController {
     /**
      * @param {UserService} userService 
@@ -53,7 +55,9 @@ class AuthController {
             if (!email) {
                 throw new GeneralUserError("Email is required");
             }
-            //TODO: validate email format
+            if (!emailRegex.test(email)) {
+                throw new GeneralUserError("Invalid email format");
+            }
             const registered = await this.userService.isRegistered({
                 email
             });
@@ -81,6 +85,9 @@ class AuthController {
             } = req.body;
             if (!username || !email || !password || !fName || !lName) {
                 throw new GeneralUserError('Username, email, password, fName, and lName are required for user creation');
+            }
+            if (!emailRegex.test(email)) {
+                throw new GeneralUserError("Invalid email format");
             }
             const registered = await this.userService.isRegistered({
                 [Sequelize.Op.or]: [{
