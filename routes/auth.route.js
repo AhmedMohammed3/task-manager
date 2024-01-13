@@ -16,9 +16,9 @@ const authController = new AuthController(userService, userUtil, authMiddleware,
 const router = express.Router();
 /**
  * @swagger
- * /auth/check-username:
+ * /check-username:
  *   post:
- *     description: Check if a username is available
+ *     description: Check if a username is available and suggest 4 alternatives if not
  *     parameters:
  *       - name: username
  *         in: body
@@ -37,6 +37,19 @@ const router = express.Router();
  *               message: User is not registered
  *               available: true
  *               success: true
+ *       409:
+ *         description: User is already registered
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: User is Registered
+ *               available: false
+ *               success: false
+ *               suggestedUsernames:
+ *                 - suggested_username_1
+ *                 - suggested_username_2
+ *                 - suggested_username_3
+ *                 - suggested_username_4
  *       400:
  *         description: Bad request
  *       500:
