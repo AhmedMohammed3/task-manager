@@ -43,7 +43,6 @@ const router = express.Router();
  *           application/json:
  *             example:
  *               message: User is Registered
- *               available: false
  *               success: false
  *               suggestedUsernames:
  *                 - suggested_username_1
@@ -51,9 +50,19 @@ const router = express.Router();
  *                 - suggested_username_3
  *                 - suggested_username_4
  *       400:
- *         description: Bad request
+ *         description: User Input Error
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Username is required
+ *               success: false
  *       500:
  *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Internal server error
+ *               success: false
  */
 router.post('/check-username', (req, res, next) => authController.checkUserName(req, res, next));
 /**
@@ -80,9 +89,26 @@ router.post('/check-username', (req, res, next) => authController.checkUserName(
  *               available: true
  *               success: true
  *       400:
- *         description: Bad request
+ *         description: User Input Error
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Email is required
+ *               success: false
+ *       409:
+ *         description: User is already registered
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: User is Registered
+ *               success: false
  *       500:
  *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Internal server error
+ *               success: false
  */
 router.post('/check-email', (req, res, next) => authController.checkEmail(req, res, next));
 /**
@@ -141,9 +167,26 @@ router.post('/check-email', (req, res, next) => authController.checkEmail(req, r
  *               message: User has been created
  *               success: true
  *       400:
- *         description: Bad request
+ *         description: User Input Error
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Username, email, password, fName, and lName are required for user creation
+ *               success: false
+ *       409:
+ *         description: Duplicate username or email
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: User is already Registered
+ *               success: false
  *       500:
  *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Could not create user
+ *               success: false
  */
 router.post('/register', (req, res, next) => authController.registerUser(req, res, next));
 /**
@@ -159,14 +202,6 @@ router.post('/register', (req, res, next) => authController.registerUser(req, re
  *           type: object
  *           properties:
  *             username:
- *               type: string
- *       - name: email
- *         in: body
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             email:
  *               type: string
  *       - name: password
  *         in: body
@@ -187,13 +222,33 @@ router.post('/register', (req, res, next) => authController.registerUser(req, re
  *               token: "your_generated_token"
  *               success: true
  *       400:
- *         description: Bad request
+ *         description: User Input Error
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Username/email and password are required for user login
+ *               success: false
  *       401:
  *         description: Unauthorized - Invalid credentials
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Provided credentials did not match
+ *               success: false
  *       404:
- *         description: User has not registered yet
+ *         description: User is not registered yet
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: User is not registered yet
+ *               success: false
  *       500:
  *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Could not authenticate user
+ *               success: false
  */
 router.post('/login', (req, res, next) => authController.loginUser(req, res, next));
 

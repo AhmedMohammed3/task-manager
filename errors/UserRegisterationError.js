@@ -1,9 +1,9 @@
 const GeneralUserError = require("./GeneralUserError");
 
-class UserRegisteration extends GeneralUserError {
+class UserRegisterationError extends GeneralUserError {
     constructor(message, body) {
         super(message, body);
     }
 }
 
-module.exports = UserRegisteration;
+module.exports = UserRegisterationError;

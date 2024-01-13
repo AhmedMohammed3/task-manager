@@ -19,7 +19,7 @@ const {
 const sequelize = require('./config/dbConfig');
 const GeneralUserError = require('./errors/GeneralUserError');
 const NotFoundError = require('./errors/NotFoundError');
-const UserRegisteration = require('./errors/UserRegisteration');
+const UserRegisterationError = require('./errors/UserRegisterationError');
 const UnauthorizedError = require('./errors/UnauthorizedError');
 
 // Middleware
@@ -35,7 +35,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 
 app.use((err, req, res, next) => {
-    let error = 'Internal Server Error';
+    let message = err.message || 'Internal Server Error';
     let statusCode = 500;
     let success = false;
     let body = err.body;
@@ -44,17 +44,16 @@ app.use((err, req, res, next) => {
         if (err instanceof NotFoundError) {
             statusCode = 404;
         }
-        if (err instanceof UserRegisteration) {
+        if (err instanceof UserRegisterationError) {
             statusCode = 409;
         }
         if (err instanceof UnauthorizedError) {
             statusCode = 401;
         }
-        error = err.message;
     }
     console.log(err);
     let resObj = {
-        error,
+        message,
         success
     };
     if (body) {

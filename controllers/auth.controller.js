@@ -3,7 +3,8 @@ const Sequelize = require('sequelize');
 
 const GeneralUserError = require('../errors/GeneralUserError');
 const UserService = require('../services/User.service');
-const UserRegisteration = require('../errors/UserRegisteration');
+const UserRegisterationError = require('../errors/UserRegisterationError');
+const UnauthorizedError = require('../errors/UnauthorizedError');
 const NotFoundError = require('../errors/NotFoundError');
 const AuthMiddleware = require('../middlewares/auth.middleware');
 const UserUtil = require('../utils/UserUtil');
@@ -37,12 +38,12 @@ class AuthController {
             });
             if (registered) {
                 const suggestedUsernames = await this.userUtil.generateUniqueSuggestions(username);
-                throw new UserRegisteration("User is Registered", {
+                throw new UserRegisterationError("User is already registered", {
                     suggestedUsernames
                 });
             }
             return res.status(202).json({
-                "message": "User is not registered",
+                message: "User is not registered",
                 available: true,
                 success: true
             });
@@ -67,7 +68,7 @@ class AuthController {
                 email
             });
             if (registered) {
-                throw new UserRegisteration("User is Registered");
+                throw new UserRegisterationError("User is Registered");
             }
             return res.status(202).json({
                 "message": "User is not registered",
@@ -102,7 +103,7 @@ class AuthController {
                 }]
             });
             if (registered) {
-                throw new UserRegisteration("User already registered");
+                throw new UserRegisterationError("User is already registered");
             }
             const hashedPass = bcrypt.hashSync(password, this.passSalt);
             const created = await this.userService.addUser({
@@ -113,7 +114,7 @@ class AuthController {
                 lName
             });
             if (!created) {
-                throw new Error("Could not create user!");
+                throw new Error("Could not create user");
             }
             return res.status(201).json({
                 message: "User has been created",
@@ -142,16 +143,16 @@ class AuthController {
                 }]
             });
             if (!user) {
-                throw new NotFoundError("User has not registered yet!");
+                throw new NotFoundError("User is not registered yet");
             }
             const match = bcrypt.compareSync(password, user.password);
             if (!match) {
-                throw new GeneralUserError('Provided credentials did not match');
+                throw new UnauthorizedError('Provided credentials did not match');
             }
 
             const token = this.authMiddleware.createToken(user);
             if (!token) {
-                throw new Error();
+                throw new Error("Could not authenticate user");
             }
             return res.status(200).json({
                 message: "Logged In",
