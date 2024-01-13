@@ -1,6 +1,7 @@
 class GeneralUserError extends Error {
-    constructor(message) {
+    constructor(message, body) {
         super(message);
+        this.body = body;
     }
 }
 

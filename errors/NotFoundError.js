@@ -1,8 +1,8 @@
 const GeneralUserError = require("./GeneralUserError");
 
 class NotFoundError extends GeneralUserError {
-    constructor(message) {
-        super(message);
+    constructor(message, body) {
+        super(message, body);
     }
 }
 
