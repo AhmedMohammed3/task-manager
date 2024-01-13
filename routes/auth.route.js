@@ -2,14 +2,16 @@ const express = require('express');
 const AuthController = require("../controllers/auth.controller");
 const UserService = require('../services/User.service');
 const User = require('../models/User');
+const UserUtil = require('../utils/UserUtil');
 const AuthMiddleware = require('../middlewares/auth.middleware');
 
 const env = process.env.NODE_ENV || "development";
 const config = require('../config/config')[env];
 
 const userService = new UserService(User);
+const userUtil = new UserUtil(userService);
 const authMiddleware = new AuthMiddleware(config.JWT_KEY)
-const authController = new AuthController(userService, authMiddleware, Number(config.PASS_SALT));
+const authController = new AuthController(userService, userUtil, authMiddleware, Number(config.PASS_SALT));
 
 const router = express.Router();
 /**

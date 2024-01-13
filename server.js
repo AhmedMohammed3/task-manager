@@ -1,7 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const { swaggerUi, specs } = require('./swagger');
+const {
+    swaggerUi,
+    specs
+} = require('./swagger');
 
 
 const authRoutes = require('./routes/auth.route');
@@ -35,6 +38,7 @@ app.use((err, req, res, next) => {
     let error = 'Internal Server Error';
     let statusCode = 500;
     let success = false;
+    let body = err.body;
     if (err instanceof GeneralUserError) {
         statusCode = 400;
         if (err instanceof NotFoundError) {
@@ -49,18 +53,23 @@ app.use((err, req, res, next) => {
         error = err.message;
     }
     console.log(err);
-    return res.status(statusCode).json({
+    let resObj = {
         error,
         success
-    });
+    };
+    if (body) {
+        resObj = {
+            ...body,
+            ...resObj
+        }
+    }
+    return res.status(statusCode).json(resObj);
 });
 
 // Connection to DB and Starting server
-sequelize.authenticate().then(() => {
+sequelize.authenticate().then(async () => {
     console.log('Connection has been established successfully.');
-    // sequelize.sync({
-    //     force: true
-    // });
+    await sequelize.sync();
     return app.listen(PORT);
 }).then(() => {
     console.log(`Server is running on port ${PORT}`);

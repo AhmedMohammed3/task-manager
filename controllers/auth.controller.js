@@ -6,23 +6,25 @@ const UserService = require('../services/User.service');
 const UserRegisteration = require('../errors/UserRegisteration');
 const NotFoundError = require('../errors/NotFoundError');
 const AuthMiddleware = require('../middlewares/auth.middleware');
+const UserUtil = require('../utils/UserUtil');
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 class AuthController {
     /**
      * @param {UserService} userService 
+     * @param {UserUtil} userUtil
      * @param {AuthMiddleware} authMiddleware
      * @param {Number} passSalt
      */
-    constructor(userService, authMiddleware, passSalt) {
+    constructor(userService, userUtil, authMiddleware, passSalt) {
         this.userService = userService;
+        this.userUtil = userUtil;
         this.authMiddleware = authMiddleware;
         this.passSalt = passSalt;
     }
 
     async checkUserName(req, res, next) {
-        //TODO: suggest usernames according to the upcoming username
         try {
             const {
                 username
@@ -34,7 +36,10 @@ class AuthController {
                 username
             });
             if (registered) {
-                throw new UserRegisteration("User is Registered");
+                const suggestedUsernames = await this.userUtil.generateUniqueSuggestions(username);
+                throw new UserRegisteration("User is Registered", {
+                    suggestedUsernames
+                });
             }
             return res.status(202).json({
                 "message": "User is not registered",

@@ -1,8 +1,9 @@
 const GeneralUserError = require("./GeneralUserError");
 
 class UserRegisteration extends GeneralUserError {
-    constructor(message) {
+    constructor(message, body) {
         super(message);
+        this.body = body;
     }
 }
 
