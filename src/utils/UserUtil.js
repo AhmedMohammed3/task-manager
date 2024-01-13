@@ -1,34 +1,45 @@
+const env = process.env.NODE_ENV || "development";
+const config = require('../../config/config')[env];
 const UserService = require("../services/User.service");
 
 class UserUtil {
     /**
-     * 
+     * @param {String} username
      * @param {UserService} userService 
      */
-    constructor(userService) {
-        this.userService = userService;
-    }
-    async generateUniqueSuggestions(username) {
+    async generateUniqueSuggestions(username, userService) {
         const suggestions = [];
         do {
             const suggestedUsername = this.generateSuggestion(username);
-            const isRegistered = await this.userService.isRegistered({
+            const isRegistered = await userService.isRegistered({
                 username: suggestedUsername
             });
 
             if (!isRegistered) {
                 suggestions.push(suggestedUsername);
             }
-        } while (suggestions.length < 4);
+        } while (suggestions.length < config.USERNAME_SUGGESTIONS);
 
         return suggestions;
+    }
+    /**
+     * @param {Object} where
+     * @param {UserService} userService 
+     */
+    async isRegistered(where, userService) {
+        where = {
+            deleted: false,
+            ...where
+        }
+        const user = await userService.getUser(where);
+        return !!user;
     }
 
     generateSuggestion(username) {
         const usernameWithoutNumbers = username.replace(/\d+/g, '');
-    
-        const randomSuffix = Math.floor(Math.random() * 1000); // Random number between 0 and 999
-        const randomChars = this.generateRandomCharacters(3); // Generate 3 random characters
+
+        const randomSuffix = Math.floor(Math.random() * 1000);
+        const randomChars = this.generateRandomCharacters(3);
 
         return `${usernameWithoutNumbers}_${randomChars}${randomSuffix}`;
     }

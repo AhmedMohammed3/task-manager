@@ -6,7 +6,7 @@ const UserUtil = require('../utils/UserUtil');
 const AuthMiddleware = require('../middlewares/auth.middleware');
 
 const env = process.env.NODE_ENV || "development";
-const config = require('../config/config')[env];
+const config = require('../../config/config')[env];
 
 const userService = new UserService(User);
 const userUtil = new UserUtil(userService);

@@ -2,7 +2,8 @@ const {
   DataTypes,
   Model
 } = require('sequelize');
-const sequelize = require('../config/dbConfig');
+const sequelize = require('../../config/dbConfig');
+const TaskStatus = require('../enums/task-statuses');
 
 class Task extends Model {}
 
@@ -23,7 +24,15 @@ Task.init({
   status: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: 0
+    defaultValue: TaskStatus.IN_PROGRESS
+  },
+  ownerId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'users',
+      key: 'id'
+    }
   },
   dueDate: {
     type: DataTypes.DATE,
@@ -39,3 +48,5 @@ Task.init({
   tableName: 'tasks',
   timestamps: true
 });
+
+module.exports = Task;

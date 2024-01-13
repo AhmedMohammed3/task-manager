@@ -33,11 +33,11 @@ class AuthController {
             if (!username) {
                 throw new GeneralUserError("Username is required");
             }
-            const registered = await this.userService.isRegistered({
+            const registered = await this.userUtil.isRegistered({
                 username
-            });
+            }, this.userService);
             if (registered) {
-                const suggestedUsernames = await this.userUtil.generateUniqueSuggestions(username);
+                const suggestedUsernames = await this.userUtil.generateUniqueSuggestions(username, this.userService);
                 throw new UserRegisterationError("User is already registered", {
                     suggestedUsernames
                 });
@@ -64,9 +64,9 @@ class AuthController {
             if (!emailRegex.test(email)) {
                 throw new GeneralUserError("Invalid email format");
             }
-            const registered = await this.userService.isRegistered({
+            const registered = await this.userUtil.isRegistered({
                 email
-            });
+            }, this.userService);
             if (registered) {
                 throw new UserRegisterationError("User is Registered");
             }
@@ -95,18 +95,18 @@ class AuthController {
             if (!emailRegex.test(email)) {
                 throw new GeneralUserError("Invalid email format");
             }
-            const registered = await this.userService.isRegistered({
+            const registered = await this.userUtil.isRegistered({
                 [Sequelize.Op.or]: [{
                     username
                 }, {
                     email
                 }]
-            });
+            }, this.userService);
             if (registered) {
                 throw new UserRegisterationError("User is already registered");
             }
             const hashedPass = bcrypt.hashSync(password, this.passSalt);
-            const created = await this.userService.addUser({
+            const created = await this.userService.createUser({
                 username,
                 email,
                 password: hashedPass,

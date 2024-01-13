@@ -5,22 +5,20 @@ const {
     swaggerUi,
     specs
 } = require('./swagger');
-
-
-const authRoutes = require('./routes/auth.route');
-
-const app = express();
+const authRoutes = require('./src/routes/auth.route');
+const tasksRoutes = require('./src/routes/tasks.route');
 const env = process.env.NODE_ENV || "development";
 const config = require('./config/config')[env];
 const {
     PORT
 } = config;
-
 const sequelize = require('./config/dbConfig');
-const GeneralUserError = require('./errors/GeneralUserError');
-const NotFoundError = require('./errors/NotFoundError');
-const UserRegisterationError = require('./errors/UserRegisterationError');
-const UnauthorizedError = require('./errors/UnauthorizedError');
+const GeneralUserError = require('./src/errors/GeneralUserError');
+const NotFoundError = require('./src/errors/NotFoundError');
+const UserRegisterationError = require('./src/errors/UserRegisterationError');
+const UnauthorizedError = require('./src/errors/UnauthorizedError');
+
+const app = express();
 
 // Middleware
 app.use(express.json());
@@ -29,6 +27,7 @@ app.use(morgan('dev'));
 
 // Routes
 app.use('/auth', authRoutes);
+app.use('/tasks', tasksRoutes);
 
 // Swagger Documentation endpoint
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
@@ -68,10 +67,14 @@ app.use((err, req, res, next) => {
 // Connection to DB and Starting server
 sequelize.authenticate().then(async () => {
     console.log('Connection has been established successfully.');
-    await sequelize.sync();
+    await sequelize.sync({
+        // force: true
+    });
     return app.listen(PORT);
 }).then(() => {
     console.log(`Server is running on port ${PORT}`);
 }).catch(err => {
     console.error('Unable to connect to the database:', err);
 });
+
+module.exports = app;

@@ -13,9 +13,9 @@ class AuthMiddleware {
         } = userData;
 
         const token = jwt.sign({
-            email,
+            userEmail: email,
             username,
-            id
+            userId: id
         }, this.secretKey, {
             expiresIn: '24h',
         });

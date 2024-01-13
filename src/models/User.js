@@ -1,10 +1,15 @@
+const Task = require('./Task');
 const {
     DataTypes,
     Model
 } = require('sequelize');
-const sequelize = require('../config/dbConfig');
+const sequelize = require('../../config/dbConfig');
 
-class User extends Model {}
+class User extends Model {
+    getFullname() {
+        return [this.fName, this.lName].join(' ');
+    }
+}
 
 User.init({
     id: {
@@ -33,6 +38,11 @@ User.init({
     password: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    deleted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
     }
 }, {
     sequelize,
@@ -40,5 +50,7 @@ User.init({
     tableName: 'users',
     timestamps: true
 });
+
+User.hasMany(Task);
 
 module.exports = User;
