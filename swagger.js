@@ -10,7 +10,9 @@ const options = {
             description: 'API documentation for Task Manager App',
         },
     },
-    apis: ['./routes/auth.route.js'],
+    apis: ['./src/routes/auth.route.js',
+        './src/routes/tasks.route.js'
+    ],
 };
 
 const specs = swaggerJsdoc(options);

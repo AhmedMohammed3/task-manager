@@ -19,6 +19,8 @@ const router = express.Router();
  * /auth/check-username:
  *   post:
  *     description: Check if a username is available and suggest 4 alternatives if not
+ *     tags:
+ *       - Auth
  *     parameters:
  *       - name: username
  *         in: body
@@ -70,6 +72,8 @@ router.post('/check-username', (req, res, next) => authController.checkUserName(
  * /auth/check-email:
  *   post:
  *     description: Check if a email is available
+ *     tags:
+ *       - Auth
  *     parameters:
  *       - name: email
  *         in: body
@@ -116,6 +120,8 @@ router.post('/check-email', (req, res, next) => authController.checkEmail(req, r
  * /auth/register:
  *   post:
  *     description: Register a new user
+ *     tags:
+ *       - Auth
  *     parameters:
  *       - name: username
  *         in: body
@@ -194,6 +200,8 @@ router.post('/register', (req, res, next) => authController.registerUser(req, re
  * /auth/login:
  *   post:
  *     description: Log in a user
+ *     tags:
+ *       - Auth
  *     parameters:
  *       - name: username
  *         in: body

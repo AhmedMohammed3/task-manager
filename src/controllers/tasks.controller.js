@@ -19,14 +19,11 @@ class TaskController {
             const {
                 userId
             } = req.user;
-            if (!userId || userId < 0) {
-                throw new GeneralUserError("UserId is required (0 or greater)");
-            }
             const tasks = await this.taskService.getAllTasks({
                 ownerId: userId
             });
             if (!tasks) {
-                throw new NotFoundError("No Tasks for user: " + userId);
+                throw new NotFoundError("No Tasks for user " + userId);
             }
             return res.status(200).json({
                 success: true,
