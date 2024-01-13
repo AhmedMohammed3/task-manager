@@ -16,7 +16,7 @@ const authController = new AuthController(userService, userUtil, authMiddleware,
 const router = express.Router();
 /**
  * @swagger
- * /check-username:
+ * /auth/check-username:
  *   post:
  *     description: Check if a username is available and suggest 4 alternatives if not
  *     parameters:
@@ -87,7 +87,7 @@ router.post('/check-username', (req, res, next) => authController.checkUserName(
 router.post('/check-email', (req, res, next) => authController.checkEmail(req, res, next));
 /**
  * @swagger
- * /register:
+ * /auth/register:
  *   post:
  *     description: Register a new user
  *     parameters:
@@ -148,7 +148,7 @@ router.post('/check-email', (req, res, next) => authController.checkEmail(req, r
 router.post('/register', (req, res, next) => authController.registerUser(req, res, next));
 /**
  * @swagger
- * /login:
+ * /auth/login:
  *   post:
  *     description: Log in a user
  *     parameters:
