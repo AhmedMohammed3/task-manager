@@ -20,10 +20,10 @@ class TaskUtil {
 
         const updateRslt = await taskService.updateTaskById(taskId, taskData);
         const {
-            updatedColumnsNo,
+            updatedColumnsCount,
             updatedTask
         } = updateRslt;
-        if (!updatedColumnsNo || updatedColumnsNo < 1) {
+        if (!updatedColumnsCount || updatedColumnsCount < 1) {
             throw new Error("Could not update task");
         }
         return updatedTask;

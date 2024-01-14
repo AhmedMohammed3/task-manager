@@ -39,7 +39,9 @@ class TaskService {
             deleted: false,
             ...where
         };
-        return await this.taskModel.update(taskData, where);
+        return await this.taskModel.update(taskData, {
+            where
+        });
     }
 
     async updateTaskById(taskId, taskData) {
@@ -55,7 +57,7 @@ class TaskService {
     async deleteTask(taskId) {
         const {
             updatedColumnsCount
-        } = this.updateTaskById(taskId, {
+        } = await this.updateTaskById(taskId, {
             deleted: true
         });
         return updatedColumnsCount > 0;

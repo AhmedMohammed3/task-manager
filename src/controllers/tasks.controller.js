@@ -37,7 +37,7 @@ class TaskController {
 
     async getTask(req, res, next) {
         try {
-            const {
+            let {
                 taskId
             } = req.params;
             if (!taskId || isNaN(taskId)) {
@@ -104,7 +104,7 @@ class TaskController {
 
     async editTask(req, res, next) {
         try {
-            const {
+            let {
                 taskId
             } = req.params;
 
@@ -147,7 +147,7 @@ class TaskController {
 
     async markTaskAsCompleted(req, res, next) {
         try {
-            const {
+            let {
                 taskId
             } = req.params;
             if (!taskId || isNaN(taskId)) {
@@ -176,11 +176,16 @@ class TaskController {
 
     async deleteTask(req, res, next) {
         try {
-            const {
+            let {
                 taskId
             } = req.params;
             if (!taskId || isNaN(taskId)) {
                 throw new GeneralUserError("Task ID is required (must be a number)");
+            }
+
+            const task = await this.taskService.getTaskById(taskId);
+            if (!task) {
+                throw new NotFoundError('Task not found');
             }
 
             const {
@@ -190,7 +195,7 @@ class TaskController {
             if (task.ownerId != userId) {
                 throw new UnauthorizedError('User does not own that task');
             }
-
+            taskId = Number(taskId);
             const deleted = await this.taskService.deleteTask(taskId);
             if (!deleted) {
                 throw new Error(`Error deleting task ${taskId}`);

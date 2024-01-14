@@ -156,9 +156,8 @@ class AuthController {
             }
             return res.status(200).json({
                 message: "Logged In",
-                loggedIn: true,
-                token,
-                success: true
+                success: true,
+                token
             });
         } catch (err) {
             next(err);

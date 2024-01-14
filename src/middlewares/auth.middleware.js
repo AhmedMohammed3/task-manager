@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const UnauthorizedError = require('../errors/UnauthorizedError');
 
 class AuthMiddleware {
     constructor(secretKey) {
@@ -25,6 +26,9 @@ class AuthMiddleware {
 
     validateToken(req, res, next) {
         const authHeader = req.header('Authorization');
+        if (!authHeader) {
+            throw new UnauthorizedError('Unauthorized - Missing token');
+        }
         const token = authHeader.split(' ')[1].trim() || req.cookies.token;
 
         if (!token) {
@@ -36,7 +40,7 @@ class AuthMiddleware {
                 throw new UnauthorizedError('Unauthorized - Invalid token');
             }
             req.user = decoded;
-            next();
+            return next();
         });
     }
 }

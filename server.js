@@ -49,8 +49,9 @@ app.use((err, req, res, next) => {
         if (err instanceof UnauthorizedError) {
             statusCode = 401;
         }
+    } else {
+        console.log(err);
     }
-    console.log(err);
     let resObj = {
         message,
         success

@@ -1,6 +1,9 @@
 const env = process.env.NODE_ENV || "development";
 const config = require('../../config/config')[env];
 const UserService = require("../services/User.service");
+const {
+    generateFromEmail: generateUsername
+} = require("unique-username-generator");
 
 class UserUtil {
     /**
@@ -10,10 +13,11 @@ class UserUtil {
     async generateUniqueSuggestions(username, userService) {
         const suggestions = [];
         do {
-            const suggestedUsername = this.generateSuggestion(username);
-            const isRegistered = await userService.isRegistered({
+            // const suggestedUsername = this.generateSuggestion(username);
+            const suggestedUsername = generateUsername(username, 3);
+            const isRegistered = await this.isRegistered({
                 username: suggestedUsername
-            });
+            }, userService);
 
             if (!isRegistered) {
                 suggestions.push(suggestedUsername);

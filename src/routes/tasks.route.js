@@ -66,7 +66,7 @@ const taskController = new TasksController(taskService);
  *               message: Internal server error
  *               success: false
  */
-router.get('/get/all/', authMiddleware.validateToken, (req, res, next) => taskController.getAllTasksForUser(req, res, next));
+router.get('/get/all/', (req, res, next) => authMiddleware.validateToken(req, res, next), (req, res, next) => taskController.getAllTasksForUser(req, res, next));
 /**
  * @swagger
  * /tasks/get/{taskId}:
@@ -129,7 +129,7 @@ router.get('/get/all/', authMiddleware.validateToken, (req, res, next) => taskCo
  *               message: Internal server error
  *               success: false
  */
-router.get('/get/:taskId', authMiddleware.validateToken, (req, res, next) => taskController.getTask(req, res, next));
+router.get('/get/:taskId', (req, res, next) => authMiddleware.validateToken(req, res, next), (req, res, next) => taskController.getTask(req, res, next));
 /**
  * @swagger
  * /tasks/add:
@@ -197,7 +197,7 @@ router.get('/get/:taskId', authMiddleware.validateToken, (req, res, next) => tas
  *               message: Internal server error
  *               success: false
  */
-router.post('/add', authMiddleware.validateToken, (req, res, next) => taskController.createTask(req, res, next));
+router.post('/add', (req, res, next) => authMiddleware.validateToken(req, res, next), (req, res, next) => taskController.createTask(req, res, next));
 /**
  * @swagger
  * /tasks/edit/{taskId}:
@@ -275,7 +275,7 @@ router.post('/add', authMiddleware.validateToken, (req, res, next) => taskContro
  *               message: Internal server error
  *               success: false
  */
-router.put('/edit/:taskId', authMiddleware.validateToken, (req, res, next) => taskController.editTask(req, res, next));
+router.put('/edit/:taskId', (req, res, next) => authMiddleware.validateToken(req, res, next), (req, res, next) => taskController.editTask(req, res, next));
 /**
  * @swagger
  * /tasks/markdone/{taskId}:
@@ -338,7 +338,7 @@ router.put('/edit/:taskId', authMiddleware.validateToken, (req, res, next) => ta
  *               message: Internal server error
  *               success: false
  */
-router.patch('/markdone/:taskId', authMiddleware.validateToken, (req, res, next) => taskController.markTaskAsCompleted(req, res, next));
+router.patch('/markdone/:taskId', (req, res, next) => authMiddleware.validateToken(req, res, next), (req, res, next) => taskController.markTaskAsCompleted(req, res, next));
 /**
  * @swagger
  * /tasks/delete/{taskId}:
@@ -389,6 +389,6 @@ router.patch('/markdone/:taskId', authMiddleware.validateToken, (req, res, next)
  *               message: Internal server error
  *               success: false
  */
-router.delete('/delete/:taskId', authMiddleware.validateToken, (req, res, next) => taskController.deleteTask(req, res, next));
+router.delete('/delete/:taskId', (req, res, next) => authMiddleware.validateToken(req, res, next), (req, res, next) => taskController.deleteTask(req, res, next));
 
 module.exports = router;
