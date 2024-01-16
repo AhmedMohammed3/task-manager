@@ -19,16 +19,35 @@ class TaskController {
             const {
                 userId
             } = req.user;
-            const tasks = await this.taskService.getAllTasks({
+
+            const page = parseInt(req.query.page) || 1;
+            const perPage = parseInt(req.query.perPage) || 2;
+
+            const {
+                count,
+                tasks
+            } = await this.taskService.getAllTasksPaginated({
                 ownerId: userId
-            });
-            if (!tasks) {
-                throw new NotFoundError("No Tasks for user " + userId);
+            }, (page - 1) * perPage, perPage);
+            if (!count || !tasks || tasks.length < 0 || count < 1) {
+                throw new NotFoundError("No Tasks for user");
             }
+            const notCompletedTasks = tasks.filter(task=> task.status == TaskStatus.IN_PROGRESS);
+            const completedTasks = tasks.filter(task=> task.status == TaskStatus.COMPLETED);
+
+            const pageCount = Math.ceil(count / perPage);
+
             return res.status(200).json({
                 success: true,
-                message: "Fetched tasks successfully",
-                tasks
+                message: 'Fetched tasks successfully',
+                notCompletedTasks,
+                completedTasks,
+                pagination: {
+                    page,
+                    itemsPerPage: perPage,
+                    pageCount,
+                    totalItemsCount: count,
+                },
             });
         } catch (err) {
             next(err);

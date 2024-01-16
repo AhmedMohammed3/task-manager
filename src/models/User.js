@@ -51,6 +51,4 @@ User.init({
     timestamps: true
 });
 
-User.hasMany(Task);
-
 module.exports = User;

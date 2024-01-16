@@ -19,7 +19,9 @@ class TaskService {
             deleted: false,
             ...where
         };
-        return await this.taskModel.findOne(where);
+        return await this.taskModel.findOne({
+            where
+        });
     }
 
     async getAllTasks(where) {
@@ -27,7 +29,28 @@ class TaskService {
             deleted: false,
             ...where
         };
-        return await this.taskModel.findAll(where);
+        return await this.taskModel.findAll({
+            where
+        });
+    }
+
+    async getAllTasksPaginated(where, offset, limit) {
+        where = {
+            deleted: false,
+            ...where
+        };
+        const {
+            count,
+            rows
+        } = await this.taskModel.findAndCountAll({
+            where,
+            offset,
+            limit,
+        });
+        return {
+            count,
+            tasks: rows
+        };
     }
 
     async createTask(taskData) {
