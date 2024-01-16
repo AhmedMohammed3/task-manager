@@ -23,13 +23,15 @@ const taskController = new TasksController(taskService);
  *     parameters:
  *       - in: query
  *         name: page
- *         description: indicating page number (for pagination) default: 1
+ *         description: indicating page number (for pagination)
+ *         default: 1
  *         required: false
  *         schema:
  *           type: number
  *       - in: query
  *         name: perPage
- *         description: indicating the number of items per page (for pagination) default: 10
+ *         description: indicating the number of items per page (for pagination)
+ *         default: 10
  *         required: false
  *         schema:
  *           type: number
