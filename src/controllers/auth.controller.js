@@ -132,7 +132,7 @@ class AuthController {
                 username,
                 password,
             } = req.body;
-            if ((!username && !email) || !password) {
+            if (!username || !password) {
                 throw new GeneralUserError('Username/email and password are required for user login');
             }
             const user = await this.userService.getUser({
